@@ -9,5 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     v4l-utils \
     && rm -rf /var/lib/apt/lists/*
 
-RUN echo 'alias build="echo \"Nothing to build\""' >> ~/.bashrc
-RUN echo 'alias run="ros2 launch gscam pipeline.launch.xml"' >> ~/.bashrc
+COPY ros_entrypoint.sh .
+
+RUN echo 'alias build="echo \"Nothing to build\""' >> /etc/bash.bashrc
+RUN echo 'source /opt/ros/humble/setup.bash; ros2 launch gscam pipeline.launch.xml' >> /run.sh && chmod +x /run.sh
+RUN echo 'alias run="su - ros /run.sh"' >> /etc/bash.bashrc
